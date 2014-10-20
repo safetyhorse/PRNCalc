@@ -14,7 +14,7 @@ public class RPNCalc
 			public void run()
 			{
 				RPNCalcFrame frame = new RPNCalcFrame();
-				frame.setTitle("RPN Calculator");
+				frame.setTitle("Motivational RPN Calculator");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 			}

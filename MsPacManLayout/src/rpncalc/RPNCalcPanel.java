@@ -1,8 +1,7 @@
 /*
  * 
  * to do:
- * add on/off buttons
- * try gridbag for layout
+ * modify layout
  * 
  */
 package rpncalc;
@@ -13,8 +12,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
 import java.util.Stack;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RPNCalcPanel extends JPanel
@@ -56,7 +60,7 @@ public class RPNCalcPanel extends JPanel
 		ActionListener insert = new InsertAction();
 		ActionListener command = new CommandAction();
 		
-		buttonPanel = new JPanel(new GridLayout(5,4));
+		buttonPanel = new JPanel(new GridLayout(4,5));
 
 		//Color pacManYellow = new Color(255,246,17);
 		//Color pacManPink = new Color(255,72,190);
@@ -68,16 +72,19 @@ public class RPNCalcPanel extends JPanel
 				Color(16,67,234), 3, true));
 
 		//addButton("ENT", command,pacManYellow);
+		addButton("ON", insert,pacManYellow);
 		addButton("7", insert,pacManPink);
 		addButton("8", insert,pacManPink);
 		addButton("9", insert,pacManPink);
 		addButton("/", command,pacManYellow);
 
+		addButton("OFF", insert,pacManYellow);
 		addButton("4", insert,pacManPink);
 		addButton("5", insert,pacManPink);
 		addButton("6", insert,pacManPink);
 		addButton("*", command,pacManYellow);
 
+		addButton("RST", insert,pacManYellow);
 		addButton("1", insert,pacManPink);
 		addButton("2", insert,pacManPink);
 		addButton("3", insert,pacManPink);
@@ -87,16 +94,18 @@ public class RPNCalcPanel extends JPanel
 		addButton("0", insert,pacManPink);
 		addButton("ENT", command,pacManYellow);
 		addButton("+", command,pacManYellow);*/
-		addButton("0", insert,pacManPink);
+		
 		addButton("ENT", command,pacManYellow);
 		addButton("CLR", insert,pacManYellow);
+		addButton("0", insert,pacManPink);
+		addButton(".", insert,pacManPink);
 		addButton("+", command,pacManYellow);
 		
 		
-		addButton(".", insert,pacManPink);
-		addButton("ON", insert,pacManYellow);
-		addButton("RST", insert,pacManYellow);
-		addButton("OFF", insert,pacManYellow);
+		
+		
+		
+		
 		
 
 		buttonPanel.setBackground(Color.black);
@@ -143,6 +152,8 @@ public class RPNCalcPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			//playClip();
+			
 			if(start)
 			{
 				display.setText("");
@@ -157,6 +168,7 @@ public class RPNCalcPanel extends JPanel
 				stackReset();
 				start = true;
 				displayOn = true;
+				playClip();
 			}
 			else if(e.getActionCommand() == "OFF")
 			{
@@ -191,6 +203,10 @@ public class RPNCalcPanel extends JPanel
 			}
 			else
 			{
+				if(displayOn)
+				{
+					playClip();
+				}
 				display.setText(display.getText() + e.getActionCommand());
 			}
 			
@@ -202,6 +218,11 @@ public class RPNCalcPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			if(displayOn)
+			{
+				playClip();
+			}
+			
 			// if number input not entered, 
 			// but command selected
 			// add display number to the stack
@@ -323,6 +344,7 @@ public class RPNCalcPanel extends JPanel
 	    return String.format("%f", f).replaceAll("0*$", "");
 	}
 	
+	// reset stack
 	public void stackReset()
 	{
 		if(stack.size() == 1)
@@ -340,7 +362,40 @@ public class RPNCalcPanel extends JPanel
 		display.setText("0");
 		printStack();
 		start = true;
+	}	
+	
+	// play an audio clip
+	// adapted from http://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
+	public void playClip()
+	{
+		int random = randInt(1,7);
+		try 
+		{
+			String soundName = random + ".wav";    
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		}
+		catch (Exception e) 
+		{
+			System.err.println(e.getMessage());
+		}
 	}
+	
+	public static int randInt(int min, int max) {
+
+	    // NOTE: Usually this should be a field rather than a method
+	    // variable so that it is not re-seeded every call.
+	    Random rand = new Random();
+
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
+	}
+
 }
 
 
