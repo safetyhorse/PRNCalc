@@ -23,6 +23,9 @@ public class RPNCalcPanel extends JPanel
 	private JPanel buttonPanel;
 	boolean start = true;
 	Stack<Double> stack = new Stack<Double>();
+	boolean displayOn = false;
+	Color pacManYellow = new Color(255,246,17);
+	Color pacManPink = new Color(255,72,190);
 	
 	public RPNCalcPanel()
 	{
@@ -55,12 +58,12 @@ public class RPNCalcPanel extends JPanel
 		
 		buttonPanel = new JPanel(new GridLayout(5,4));
 
-		Color pacManYellow = new Color(255,246,17);
-		Color pacManPink = new Color(255,72,190);
+		//Color pacManYellow = new Color(255,246,17);
+		//Color pacManPink = new Color(255,72,190);
 
 		display.setBackground(Color.black);
 		display.setOpaque(true);
-		display.setForeground(pacManPink);
+		display.setForeground(Color.black);
 		display.setBorder(BorderFactory.createLineBorder(new
 				Color(16,67,234), 3, true));
 
@@ -91,9 +94,9 @@ public class RPNCalcPanel extends JPanel
 		
 		
 		addButton(".", insert,pacManPink);
-		addButton("ON", command,pacManYellow);
+		addButton("ON", insert,pacManYellow);
 		addButton("RST", insert,pacManYellow);
-		addButton("", insert,pacManPink);
+		addButton("OFF", insert,pacManYellow);
 		
 
 		buttonPanel.setBackground(Color.black);
@@ -146,14 +149,30 @@ public class RPNCalcPanel extends JPanel
 				start = false;
 			}
 			//System.out.println(e.getActionCommand());
-			if(e.getActionCommand() == "CLR")
+			if(e.getActionCommand() == "ON")
+			{
+				//System.out.println(displayOn);
+				display.setForeground(pacManPink);
+				display.setText("0");
+				stackReset();
+				start = true;
+				displayOn = true;
+			}
+			else if(e.getActionCommand() == "OFF")
+			{
+				display.setForeground(Color.black);
+				stackReset();
+				start = true;
+				displayOn = false;
+			}
+			else if(e.getActionCommand() == "CLR")
 			{
 				display.setText("0");
 				start = true;
 			}
 			else if(e.getActionCommand() == "RST")
 			{
-				if(stack.size() == 1)
+				/*if(stack.size() == 1)
 				{
 					stack.pop();
 				}
@@ -167,7 +186,8 @@ public class RPNCalcPanel extends JPanel
 				
 				display.setText("0");
 				printStack();
-				start = true;
+				start = true;*/
+				stackReset();
 			}
 			else
 			{
@@ -301,6 +321,25 @@ public class RPNCalcPanel extends JPanel
 	        return String.format("%d", (int)f);
 	    }
 	    return String.format("%f", f).replaceAll("0*$", "");
+	}
+	
+	public void stackReset()
+	{
+		if(stack.size() == 1)
+		{
+			stack.pop();
+		}
+		else if(stack.size() > 1)
+		{
+			for(int i=0; i <= stack.size()+1; i++)
+			{
+				stack.pop();
+			}
+		}
+		
+		display.setText("0");
+		printStack();
+		start = true;
 	}
 }
 
