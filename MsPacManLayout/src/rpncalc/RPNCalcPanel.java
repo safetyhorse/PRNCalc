@@ -2,7 +2,6 @@
  * 
  * to do:
  * add on/off buttons
- * automatically use 2nd operand even if not entered
  * try gridbag for layout
  * 
  */
@@ -23,7 +22,7 @@ public class RPNCalcPanel extends JPanel
 	private JLabel display;
 	private JPanel buttonPanel;
 	boolean start = true;
-	Stack<Float> stack = new Stack<Float>();
+	Stack<Double> stack = new Stack<Double>();
 	
 	public RPNCalcPanel()
 	{
@@ -186,16 +185,18 @@ public class RPNCalcPanel extends JPanel
 			// if number input not entered, 
 			// but command selected
 			// add display number to the stack
+			// must be in command state (not input state)
 			if(e.getActionCommand() != "ENT" && 
+					start == false &&
 					(display.getText() != "0" || 
 					display.getText() != "Invalid"))
 			{
-				stack.push(Float.parseFloat(display.getText()));
-			}
+				stack.push(Double.parseDouble(display.getText()));
+			}/**/
 			
 			if(e.getActionCommand() == "ENT")
 			{
-				stack.push(Float.parseFloat(display.getText()));
+				stack.push(Double.parseDouble(display.getText()));
 			}
 			/*else if(e.getActionCommand() == "CLR")
 			{
@@ -206,36 +207,37 @@ public class RPNCalcPanel extends JPanel
 				switch(e.getActionCommand())
 				{
 				case "+":
-					float p2 = stack.pop();
-					float p1 = stack.pop();
-					float p = p1 + p2;
+					double p2 = stack.pop();
+					double p1 = stack.pop();
+					double p = p1 + p2;
 					stack.push(p);
-					display.setText("" + p);
+					//System.out.println(removeTrailingZeros(p));
+					display.setText("" + removeTrailingZeros(p));
 				break;
 				case "-":
-					float m2 = stack.pop();
-					float m1 = stack.pop();
-					float m = m1 - m2;
+					double m2 = stack.pop();
+					double m1 = stack.pop();
+					double m = m1 - m2;
 					stack.push(m);
-					display.setText("" + m);
+					display.setText("" + removeTrailingZeros(m));
 				break;
 				case "*":
-					float t2 = stack.pop();
-					float t1 = stack.pop();
-					float t = t1 * t2;
+					double t2 = stack.pop();
+					double t1 = stack.pop();
+					double t = t1 * t2;
 					stack.push(t);
-					display.setText("" + t);
+					display.setText("" + removeTrailingZeros(t));
 				break;
 				case "/":
-					float d2 = stack.pop();
+					double d2 = stack.pop();
 					//handle division by zero
 					//replace number in stack
 					if(d2 != 0)
 					{
-						float d1 = stack.pop();
-						float d = d1 / d2;
+						double d1 = stack.pop();
+						double d = d1 / d2;
 						stack.push(d);
-						display.setText("" + d);
+						display.setText("" + removeTrailingZeros(d));
 					}
 					else
 					{
@@ -289,6 +291,16 @@ public class RPNCalcPanel extends JPanel
 			System.out.println(stack.elementAt(i) + " ");
 		}
 		System.out.println("");
+	}
+	
+	//clean display - don't show unnecessary decimals
+	// stackoverflow.com/questions/703396/how-to-nicely-format-floating-numbers-to-string-without-unnecessary-decimal-0
+	public static String removeTrailingZeros(double f)
+	{
+	    if(f == (int)f) {
+	        return String.format("%d", (int)f);
+	    }
+	    return String.format("%f", f).replaceAll("0*$", "");
 	}
 }
 
