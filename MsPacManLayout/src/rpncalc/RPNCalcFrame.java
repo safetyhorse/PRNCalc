@@ -20,8 +20,10 @@ class MarqueePanel extends JPanel
 {
 	public MarqueePanel()
 	{
-		this.setBackground(Color.BLACK);
-		this.add(new JLabel(new ImageIcon("mspacmanmarquee.jpg")));
+		this.setBackground(Color.white);
+		// image from
+		// http://www.safam.com/press.shtml
+		this.add(new JLabel(new ImageIcon("mustache.jpg")));
 		this.add(new RPNCalcPanel());
 
 	}

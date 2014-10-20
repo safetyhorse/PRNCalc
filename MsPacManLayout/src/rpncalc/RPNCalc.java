@@ -17,6 +17,7 @@ public class RPNCalc
 				frame.setTitle("Motivational RPN Calculator");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
+				frame.setResizable(false);
 			}
 		});
 	}

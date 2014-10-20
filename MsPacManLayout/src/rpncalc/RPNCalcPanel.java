@@ -20,6 +20,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 
 public class RPNCalcPanel extends JPanel
 {
@@ -28,8 +29,8 @@ public class RPNCalcPanel extends JPanel
 	boolean start = true;
 	Stack<Double> stack = new Stack<Double>();
 	boolean displayOn = false;
-	Color pacManYellow = new Color(255,246,17);
-	Color pacManPink = new Color(255,72,190);
+	Color pacManYellow = Color.DARK_GRAY;
+	Color pacManPink = Color.black;
 	
 	public RPNCalcPanel()
 	{
@@ -38,7 +39,7 @@ public class RPNCalcPanel extends JPanel
 
 		try
 		{
-			File f = new File("ARCADE_R.ttf");
+			File f = new File("big_noodle_titling_oblique.ttf");
 			FileInputStream in = new FileInputStream(f);
 			Font dynamicFont = Font.createFont(Font.TRUETYPE_FONT,
 					in);
@@ -65,11 +66,13 @@ public class RPNCalcPanel extends JPanel
 		//Color pacManYellow = new Color(255,246,17);
 		//Color pacManPink = new Color(255,72,190);
 
-		display.setBackground(Color.black);
+		display.setBackground(Color.white);
 		display.setOpaque(true);
-		display.setForeground(Color.black);
-		display.setBorder(BorderFactory.createLineBorder(new
-				Color(16,67,234), 3, true));
+		display.setForeground(Color.white);
+		//display.setBorder(BorderFactory.createLineBorder(Color.black, 1, true));
+		display.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(Color.white, 2, true),
+				BorderFactory.createLineBorder(Color.black, 2, true)));
 
 		//addButton("ENT", command,pacManYellow);
 		addButton("ON", insert,pacManYellow);
@@ -108,7 +111,7 @@ public class RPNCalcPanel extends JPanel
 		
 		
 
-		buttonPanel.setBackground(Color.black);
+		buttonPanel.setBackground(Color.white);
 		add(buttonPanel, BorderLayout.CENTER);
 
 	}
@@ -122,7 +125,7 @@ public class RPNCalcPanel extends JPanel
 		button.addActionListener(listener);
 		try
 		{
-			File f = new File("ARCADE_R.ttf");
+			File f = new File("big_noodle_titling_oblique.ttf");
 			FileInputStream in = new FileInputStream(f);
 			Font dynamicFont = Font.createFont(Font.TRUETYPE_FONT,
 					in);
@@ -133,10 +136,12 @@ public class RPNCalcPanel extends JPanel
 		{
 			System.out.println("Loading Font Didn't Work");
 		}
-		button.setBackground(Color.BLACK);
+		button.setBackground(Color.white);
 		button.setForeground(fg);
-		button.setBorder(BorderFactory.createLineBorder(new
-				Color(16,67,234), 3, true));
+		//button.setBorder(BorderFactory.createLineBorder(Color.red, 1, true));
+		button.setBorder(new CompoundBorder(
+				BorderFactory.createLineBorder(Color.white, 2, true),
+				BorderFactory.createLineBorder(Color.black, 2, true)));
 		buttonPanel.add(button);
 	}
 
@@ -172,7 +177,7 @@ public class RPNCalcPanel extends JPanel
 			}
 			else if(e.getActionCommand() == "OFF")
 			{
-				display.setForeground(Color.black);
+				display.setForeground(Color.white);
 				stackReset();
 				start = true;
 				displayOn = false;
@@ -366,6 +371,8 @@ public class RPNCalcPanel extends JPanel
 	
 	// play an audio clip
 	// adapted from http://stackoverflow.com/questions/15526255/best-way-to-get-sound-on-button-press-for-a-java-calculator
+	// audio from http://vozme.com/index.php?lang=en
+	// converted to wav files using audacity
 	public void playClip()
 	{
 		int random = randInt(1,7);
