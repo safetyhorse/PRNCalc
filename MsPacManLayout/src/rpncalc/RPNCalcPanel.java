@@ -183,6 +183,16 @@ public class RPNCalcPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			// if number input not entered, 
+			// but command selected
+			// add display number to the stack
+			if(e.getActionCommand() != "ENT" && 
+					(display.getText() != "0" || 
+					display.getText() != "Invalid"))
+			{
+				stack.push(Float.parseFloat(display.getText()));
+			}
+			
 			if(e.getActionCommand() == "ENT")
 			{
 				stack.push(Float.parseFloat(display.getText()));
